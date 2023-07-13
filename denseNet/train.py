@@ -52,8 +52,8 @@ def train_model(model, criterion, optimizer, dataloaders, scheduler,
                 confusion_matrix[phase].add(preds, labels.data)
             epoch_loss = running_loss / dataset_sizes[phase]
             epoch_acc = running_corrects / dataset_sizes[phase]
-            costs[phase].append(epoch_loss)
-            accs[phase].append(epoch_acc)
+            costs[phase].append(epoch_loss.detach().cpu().numpy())
+            accs[phase].append(epoch_acc.detach().cpu().numpy())
             print('{} Loss: {:.4f} Acc: {:.4f}'.format(
                 phase, epoch_loss, epoch_acc))
             print('Confusion Meter:\n', confusion_matrix[phase].value())
@@ -98,7 +98,7 @@ def get_metrics(model, criterion, dataloaders, dataset_sizes, phase='valid'):
         loss = criterion(outputs, labels, phase)
         # statistics
         running_loss += loss.data[0] * inputs.size(0)
-        preds = (outputs.data > 0.5).type(torch.cuda.FloatTensor)
+        preds = (outputs.data > 0.5).type(torch.cuda.FloatTensor).unsqueeze(0)
         running_corrects += torch.sum(preds == labels.data)
         confusion_matrix.add(preds, labels.data)
 

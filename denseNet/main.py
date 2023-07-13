@@ -1,24 +1,23 @@
-import time
-import copy
-import pandas as pd
+
 import torch
-from torch.autograd import Variable
+import os
 from densenet import densenet169
 from utils import plot_training, n_p, get_count
 from train import train_model, get_metrics
 from pipeline import get_study_level_data, get_dataloaders
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 
 def main():
     # set data directory path
     base_dir = r"C:\studies\IDC_dataScience\year_B\AIForHealthcare\HW3\MURA-v1.1"
-
+    case_study = 'XR_WRIST'
     # #### load study level dict data
-    study_data = get_study_level_data(study_type='XR_WRIST', base_dir=base_dir)
+    study_data = get_study_level_data(study_type=case_study, base_dir=base_dir)
 
     # #### Create dataloaders pipeline
     data_cat = ['train', 'valid'] # data categories
-    dataloaders = get_dataloaders(study_data, batch_size=4, num_workers=4, study_level=False)
+    dataloaders = get_dataloaders(study_data, batch_size=1, num_workers=1, study_level=False)
     dataset_sizes = {x: len(study_data[x]) for x in data_cat}
 
 

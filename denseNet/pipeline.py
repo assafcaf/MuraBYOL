@@ -23,8 +23,6 @@ def get_study_level_data(study_type, base_dir):
         study_data[phase] = pd.DataFrame(columns=['Path', 'Count', 'Label'])
         i = 0
         for patient in tqdm(patients): # for each patient folder
-            if patient == "patient07840":
-                stop=1
             for study in os.listdir(os.path.join(pth, patient)): # for each study in that patient folder
                 label = study_label[study.split('_')[1]]  # get label 0 or 1
                 path = os.path.join(pth, patient, study) + os.sep  # path to this study
