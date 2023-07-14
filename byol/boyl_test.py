@@ -14,19 +14,18 @@ if __name__ == '__main__':
 
     # training parameters
     batch_size = 64
-    image_size = 256
+    image_size = 224
     num_epochs = 25
-    num_workers = 1
-    learning_rate = 3e-4
+    num_workers = 4
+    learning_rate = 7.5e-5
     hidden_layer = 'avgpool'
     debug = False
-    resnet = eval(f"models.{model_name}(pretrained=True)")
+    resnet = eval(f"models.{model_name}(pretrained=True)").to(device)
     learner = BYOL(
         resnet,
         image_size=image_size,
         hidden_layer=hidden_layer
     )
-    learner.to(device)
     opt = torch.optim.Adam(learner.parameters(), lr=learning_rate)
 
 
@@ -34,8 +33,8 @@ if __name__ == '__main__':
     train_pth = r"C:\studies\IDC_dataScience\year_B\AIForHealthcare\HW3\data\MURAProcessed\train"
     valid_pth = r"C:\studies\IDC_dataScience\year_B\AIForHealthcare\HW3\data\MURAProcessed\valid"
 
-    ds_train = build_ds(train_pth, batch_size=batch_size)
-    ds_valid = build_ds(valid_pth, batch_size=batch_size)
+    ds_train = build_ds(train_pth, batch_size=batch_size, image_size=image_size)
+    ds_valid = build_ds(valid_pth, batch_size=batch_size,  image_size=image_size)
 
 
     valid_loss = validate(ds_valid, learner)
@@ -70,4 +69,4 @@ if __name__ == '__main__':
     # save your improved network
     if not debug:
         save_model(resnet, "trained_models", model_name, meta_data=meta_data)
-
+        print("model saved")
