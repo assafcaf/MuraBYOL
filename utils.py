@@ -19,9 +19,10 @@ def validate(ds, model, device='cuda'):
 
 def save_model(model, path, model_name, meta_data=None):
     model_dir = os.path.join(path, "model" + str(len(os.listdir(path))+1))
+
     # create model directory
-    if not os.path.exists(model_dir):
-        os.makedirs(model_dir)
+    os.makedirs(path, exist_ok=True)
+    os.makedirs(model_dir, exist_ok=True)
 
     # save resnet model
     torch.save(model.state_dict(), os.path.join(model_dir, f'improved-{model_name}.pt'))
@@ -54,10 +55,6 @@ def fetch_data_for_fine_tuning(p, verify_study_type_balance=False, input_pth="",
                 sample_images = random.sample(study_type_files, sample_size)
                 for image in sample_images:
                     shutil.copy2(os.path.join(label_path, image), os.path.join(output_pth, label, image))
-                print(
-                    f"Data for class {label} and study type {study_type} was fetched for fine tuning. {len(sample_images)} images were sampled")
-
-
         else:
             sample_size = int(len(files) * p)
             sample_images = random.sample(files, sample_size)
@@ -65,6 +62,7 @@ def fetch_data_for_fine_tuning(p, verify_study_type_balance=False, input_pth="",
                 shutil.copy2(os.path.join(label_path, image), os.path.join(output_pth, image))
             print(
                 f"Data for class {label} was fetched for fine tuning. {len(sample_images)} images were sampled")
+
 
 def calculate_accuracy_per_study(x_names, y_pred, threshold=0.1):
     """
@@ -84,9 +82,47 @@ def calculate_accuracy_per_study(x_names, y_pred, threshold=0.1):
     per_study_pred['final_pred'] = per_study_pred.apply(lambda x: 1 if x > threshold else 0)
 
     # Calculate the accuracy per study
-    per_study_acc = accuracy_score(y_true, per_study_pred['final_pred'])
-    per_study_precision = precision_score(y_true, per_study_pred['final_pred'])
-    per_study_recall = recall_score(y_true, per_study_pred['final_pred'])
-    per_study_f1 = f1_score(y_true, per_study_pred['final_pred'])
+    acc = accuracy_score(y_true, per_study_pred['final_pred'])
+    precision = precision_score(y_true, per_study_pred['final_pred'])
+    recall = recall_score(y_true, per_study_pred['final_pred'])
+    f1 = f1_score(y_true, per_study_pred['final_pred'])
 
-    return per_study_acc, per_study_precision, per_study_recall, per_study_f1
+    return {'acc': acc, 'precision': precision, 'recall': recall, 'f1': f1}
+
+def organize_data(input_data_location, output_data_location):
+    # Create the MURA v2 root folder
+    mura_v2_folder = output_data_location
+    os.makedirs(mura_v2_folder, exist_ok=True)
+
+    # Iterate through the input data hierarchy
+    for split in [d for d in os.listdir(input_data_location) if os.path.isdir(os.path.join(input_data_location, d))]:
+        split_folder = os.path.join(input_data_location, split)
+        output_folder = os.path.join(mura_v2_folder, split)
+        os.makedirs(output_folder, exist_ok=True)
+        for study_type in os.listdir(split_folder):
+            study_type_folder = os.path.join(split_folder, study_type)
+            for patient in os.listdir(study_type_folder):
+                patient_folder = os.path.join(study_type_folder, patient)
+                for study in os.listdir(patient_folder):
+                    study_folder = os.path.join(patient_folder, study)
+                    for image in os.listdir(study_folder):
+
+                        # Ignore corrupted images
+                        if image[0] == ".":
+                            print(f"Skipping {os.path.join(study_folder, image)}")
+                            continue
+                        # Determine the label based on the original file path
+                        if "positive" in study:
+                            label_folder = os.path.join(output_folder, "positive")
+                        else:
+                            label_folder = os.path.join(output_folder, "negative")
+
+                        os.makedirs(label_folder, exist_ok=True)  # Create the label folder if it doesn't exist
+
+                        new_filename = f"{study_type}_{patient}_{study}_{image}"
+                        # Copy the file to the label folder
+                        shutil.copy2(os.path.join(study_folder, image), os.path.join(label_folder, new_filename))
+
+    # Print a message when the data organization is complete
+    print("Data organization complete!")
+

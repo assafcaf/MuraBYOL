@@ -31,6 +31,32 @@ def get_study_level_data(study_type, base_dir):
                 i += 1
     return study_data
 
+def get_full_data(base_dir):
+    """
+    Returns a dict, with keys 'train' and 'valid' and respective values as study level dataframes,
+    these dataframes contain three columns 'Path', 'Count', 'Label'
+    Args:
+        study_type (string): one of the seven study type folder names in 'train/valid/test' dataset
+    """
+    data = {}
+    study_label = {'positive': 1, 'negative': 0}
+    for phase in data_cat:
+        pth = os.path.join(base_dir, phase)
+        studies = list(os.walk(pth))[0][1]
+        data[phase] = pd.DataFrame(columns=['Path', 'Count', 'Label'])
+        i = 0
+        for study in studies:
+            pth = os.path.join(base_dir, phase, study)
+            patients = list(os.walk(pth))[0][1] # list of patient folder names
+            for patient in tqdm(patients): # for each patient folder
+                for study in os.listdir(os.path.join(pth, patient)): # for each study in that patient folder
+                    label = study_label[study.split('_')[1]]  # get label 0 or 1
+                    path = os.path.join(pth, patient, study) + os.sep  # path to this study
+                    legit_files = [x for x in os.listdir(path) if not x[0] == "."]
+                    data[phase].loc[i] = [path, len(legit_files), label]  # add new row
+                    i += 1
+    return data
+
 class ImageDataset(Dataset):
     """training dataset."""
 
