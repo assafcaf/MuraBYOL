@@ -64,16 +64,18 @@ For more advanced parameter tuning you can run `python .\src\finetuneBoylModel.p
 ## Evaluation
 
 To evaluate the pretrained model using  Linear classifaier on the test set, execute the evaluation script:
-bashCopy code
 
+bashCopy code
 `python .\src\linear_representation_evaluation.py --model-pth<path_to_fine_tune_model>`
+
 For example:
  `model-pth = trained_models\boyl\model1\improved-resnet18.pt`
 
-
 To evaluate the finetuned model on the test set, execute the evaluation script:
+
 bashCopy code
 `python .\src\evaluate_BoylMode.py --model-pth<path_to_fine_tune_model>` 
+
 for example: path_to_fine_tune_model = `\trained_models\boyl\model1\model-finetuned-processed_100.pt`
 
 
@@ -82,7 +84,15 @@ for example: path_to_fine_tune_model = `\trained_models\boyl\model1\model-finetu
 for example: path_to_fine_tune_model = `\trained_models\boyl\model1\model-finetuned-processed_100.pt`
 ## Baseline
 
+To train the baseline model (densnet169) on the MURA dataset, use the following command:
+bashCopy code
+
+`python .\src\trainBoylModel.py --data-in MURA-v1.1 `
+ 
 ## Results
 
-After training and evaluation, the results will be displayed, including accuracy, precision, recall, and F1-score for classifying normal and abnormal X-ray images.
-
+| Finetune on: | accuracy | recall | precision|  F1| 
+|--|--|--|--|--|
+| 1% | 0.71816 | 0.753354 | 0.798687 | 0.712891
+| 10% | 0.757075 |  0.793587|  0.866521| 0.731978
+| 100% | 0.76533 |  0.793782| 0.838074 | 0.753937
