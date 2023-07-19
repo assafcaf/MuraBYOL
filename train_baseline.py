@@ -17,20 +17,12 @@ def arg_parse():
                         type=str)
     parser.add_argument('--batch-size', help='batch size for training', default=1,
                         type=int)
-    parser.add_argument('--image-size', help='image size', default=224,
+    parser.add_argument('--num-epochs', help='number of epochs', default=5,
                         type=int)
-    parser.add_argument('--num-epochs', help='number of epochs', default=1,
-                        type=int)
-    parser.add_argument('--num-workers', help='number of workers for data loader', default=4,
-                        type=int)
-    parser.add_argument('--learning-rate', help='learning rate', default=5e-4,
-                        type=float)
-    parser.add_argument('--positive-weights', help='weight of positive samples in the loss', default=2,
+    parser.add_argument('--learning-rate', help='learning rate', default=0.0001,
                         type=float)
     parser.add_argument('--model-dir', help='location to store the trained model',
-                        default=r"trained_models\boyl\model1", type=str)
-    parser.add_argument('--model-name', help='output data location',
-                        default="resnet18", type=str)
+                        default=r"trained_models\densnet", type=str)
     return parser.parse_args()
 
 
@@ -80,7 +72,6 @@ if __name__ == '__main__':
 
         # #### Train model
         model = train_model(model, criterion, optimizer, dataloaders, scheduler, dataset_sizes, num_epochs=args.num_epochs)
-        os.mkdir(fr'trained_models\densnet', exist_ok=True)
-        torch.save(model.state_dict(), fr'trained_models\densnet_{study_type}.pth')
+        torch.save(model.state_dict(), os.path.join(args.model_dir, f"densnet_{study_type}.pth"))
 
         get_metrics(model, criterion, dataloaders, dataset_sizes)

@@ -10,10 +10,10 @@ data_cat = ['train', 'valid'] # data categories
 
 def get_study_level_data(study_type, base_dir):
     """
-    Returns a dict, with keys 'train' and 'valid' and respective values as study level dataframes, 
+    Returns a dict, with keys 'train' and 'valid' and respective values as study level dataframes,
     these dataframes contain three columns 'Path', 'Count', 'Label'
     Args:
-        study_type (string): one of the seven study type folder names in 'train/valid/test' dataset 
+        study_type (string): one of the seven study type folder names in 'train/valid/test' dataset
     """
     study_data = {}
     study_label = {'positive': 1, 'negative': 0}
@@ -85,7 +85,7 @@ class ImageDataset(Dataset):
         sample = {'images': images, 'label': label}
         return sample
 
-def get_dataloaders(data, batch_size=8, num_workers=4, study_level=False):
+def get_dataloaders(data, batch_size=8, study_level=False):
     '''
     Returns dataloader pipeline with data augmentation
     '''
@@ -95,7 +95,7 @@ def get_dataloaders(data, batch_size=8, num_workers=4, study_level=False):
                 transforms.RandomHorizontalFlip(),
                 transforms.RandomRotation(10),
                 transforms.ToTensor(),
-                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]) 
+                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         ]),
         'valid': transforms.Compose([
             transforms.Resize((224, 224)),
@@ -104,9 +104,7 @@ def get_dataloaders(data, batch_size=8, num_workers=4, study_level=False):
         ]),
     }
     image_datasets = {x: ImageDataset(data[x], transform=data_transforms[x]) for x in data_cat}
-    ## TODO: change the numworkers from 4 to 1 if multiprocessing is not supported
-    dataloaders = {x: DataLoader(image_datasets[x], batch_size=batch_size, shuffle=True, num_workers=num_workers)
-                   for x in data_cat}
+    dataloaders = {x: DataLoader(image_datasets[x], batch_size=batch_size, shuffle=True, num_workers=4) for x in data_cat}
     return dataloaders
 
 if __name__=='main':
