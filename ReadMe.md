@@ -40,7 +40,9 @@ cd mura-byol`
 bashCopy code
 
 ``conda create -n mura-byol``
+
 ``conda activate mura-byol``
+
 ``pip install -r requirements.txt`` 
 
 ## Usage
