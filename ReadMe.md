@@ -64,18 +64,16 @@ For more advanced parameter tuning you can run `python .\src\finetuneBoylModel.p
 ## Evaluation
 
 To evaluate the pretrained model using  Linear classifaier on the test set, execute the evaluation script:
-
 bashCopy code
-`python .\src\linear_representation_evaluation.py --model-pth<path_to_fine_tune_model>`
 
+`python .\src\linear_representation_evaluation.py --model-pth<path_to_fine_tune_model>`
 For example:
  `model-pth = trained_models\boyl\model1\improved-resnet18.pt`
 
-To evaluate the finetuned model on the test set, execute the evaluation script:
 
+To evaluate the finetuned model on the test set, execute the evaluation script:
 bashCopy code
 `python .\src\evaluate_BoylMode.py --model-pth<path_to_fine_tune_model>` 
-
 for example: path_to_fine_tune_model = `\trained_models\boyl\model1\model-finetuned-processed_100.pt`
 
 
