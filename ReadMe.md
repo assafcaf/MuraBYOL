@@ -48,6 +48,7 @@ bashCopy code
 ## Usage
 
 Before running the training or evaluation scripts, please ensure that the dataset is correctly prepared and located in the proper location by utilize the `dataPreprocessing.py` script in the srource directory
+
 To utilized the script run `python ./src/dataPreprocessing.py --data-in <path_to_mura_files>`
 
 ## Training BYOL
