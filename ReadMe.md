@@ -1,20 +1,10 @@
 
+
 # Deep Neural Network for Classifying Normal and Abnormal X-ray Images using BYOL Self-Supervised Learning
 
 This repository contains code to train a deep neural network for classifying normal and abnormal X-ray images using the BYOL (Bootstrap Your Own Latent) self-supervised learning technique. The model is fine-tuned using 1%, 10%, and 100% of the data available in the MURA dataset.
-The code is based on [Byol](https://github.com/lucidrains/byol-pytorch) [DensnetMura](https://github.com/pyaf/DenseNet-MURA-PyTorch)
+The code is based on [lucidrains/byol-pytorch](https://github.com/lucidrains/byol-pytorch), [pyaf/DenseNet-MURA-PyTorch](https://github.com/pyaf/DenseNet-MURA-PyTorch)
 
-## Table of Contents
-
--   [Introduction](https://chat.openai.com/#introduction)
--   [Dataset](https://chat.openai.com/#dataset)
--   [Installation](https://chat.openai.com/#installation)
--   [Usage](https://chat.openai.com/#usage)
--   [Training](https://chat.openai.com/#training)
--   [Evaluation](https://chat.openai.com/#evaluation)
--   [Results](https://chat.openai.com/#results)
--   [Contributing](https://chat.openai.com/#contributing)
--   [License](https://chat.openai.com/#license)
 
 ## Introduction
 
@@ -73,14 +63,25 @@ For example --model-dir = `"trained_models\boyl\model1\improved-resnet18.pt"`
 For more advanced parameter tuning you can run `python .\src\finetuneBoylModel.py --help` to modify the command-line arguments as per your requirements, such as the data directory, batch size, and learning rate.
 ## Evaluation
 
-To evaluate the trained model on the test set, execute the evaluation script:
+To evaluate the pretrained model using  Linear classifaier on the test set, execute the evaluation script:
 
 bashCopy code
+`python .\src\linear_representation_evaluation.py --model-pth<path_to_fine_tune_model>`
 
+For example:
+ `model-pth = trained_models\boyl\model1\improved-resnet18.pt`
+
+To evaluate the finetuned model on the test set, execute the evaluation script:
+
+bashCopy code
 `python .\src\evaluate_BoylMode.py --model-pth<path_to_fine_tune_model>` 
 
 for example: path_to_fine_tune_model = `\trained_models\boyl\model1\model-finetuned-processed_100.pt`
 
+
+ 
+
+for example: path_to_fine_tune_model = `\trained_models\boyl\model1\model-finetuned-processed_100.pt`
 ## Baseline
 
 ## Results

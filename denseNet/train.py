@@ -3,7 +3,7 @@ import copy
 import torch
 from torchnet import meter
 from torch.autograd import Variable
-from utils import plot_training
+# from utils import plot_training
 
 data_cat = ['train', 'valid'] # data categories
 
@@ -71,7 +71,7 @@ def train_model(model, criterion, optimizer, dataloaders, scheduler,
     print('Training complete in {:.0f}m {:.0f}s'.format(
         time_elapsed // 60, time_elapsed % 60))
     print('Best valid Acc: {:4f}'.format(best_acc))
-    plot_training(costs, accs)
+    # plot_training(costs, accs)
     # load best model weights
     model.load_state_dict(best_model_wts)
     return model
