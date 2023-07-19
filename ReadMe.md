@@ -47,7 +47,7 @@ bashCopy code
 
 ## Usage
 
-Before running the training or evaluation scripts, please ensure that the dataset is correctly prepared and located in the proper location by utilize the `dataPreprocessing.py` script in the srource directory
+Before running the training or evaluation scripts, please ensure that the dataset is correctly prepared and located in the proper location by utilizing the `dataPreprocessing.py` script in the source directory
 
 To utilized the script run `python ./src/dataPreprocessing.py --data-in <path_to_mura_files>`
 
@@ -59,16 +59,18 @@ bashCopy code
 
 `python .\src\trainBoylModel.py`
  
- For more advansed parametertuning pls you can run `python .\src\trainBoylModel.py --help` to modify the command-line arguments as per your requirements, such as the data directory, batch size, and learning rate.
+ For more advanced parameter tuning pls you can run `python .\src\trainBoylModel.py --help`
+ 
+ to modify the command-line arguments as per your requirements, such as the data directory, batch size, and learning rate.
 
 ## Finetune
-To finetune the the model use the following command:
+To finetune the model use the following command:
 bashCopy code
 ` python .\src\finetuneBoylModel.py --model-dir <path_to_byol_model>`
 
 For example --model-dir = `"trained_models\boyl\model1\improved-resnet18.pt"`
 
-For more advansed parametertuning pls you can run `python .\src\finetuneBoylModel.py --help` to modify the command-line arguments as per your requirements, such as the data directory, batch size, and learning rate.
+For more advanced parameter tuning you can run `python .\src\finetuneBoylModel.py --help` to modify the command-line arguments as per your requirements, such as the data directory, batch size, and learning rate.
 ## Evaluation
 
 To evaluate the trained model on the test set, execute the evaluation script:
