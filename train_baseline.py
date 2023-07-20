@@ -15,7 +15,7 @@ def arg_parse():
     parser = argparse.ArgumentParser(description='MURA data organization')
     parser.add_argument('--data-in', help='input data location', default=r"data\processed_100",
                         type=str)
-    parser.add_argument('--batch-size', help='batch size for training', default=1,
+    parser.add_argument('--batch-size', help='batch size for training', default=8,
                         type=int)
     parser.add_argument('--num-epochs', help='number of epochs', default=5,
                         type=int)
@@ -29,12 +29,12 @@ def arg_parse():
 if __name__ == '__main__':
     args = arg_parse()
     # #### load study level dict data
-    for study_type in ['XR_ELBOW', 'XR_HAND', 'XR_SHOULDER']:
-        study_data = get_study_level_data(study_type=study_type, base_dir=args.data_in)
+    for study_type in ['XR_WRIST', 'XR_ELBOW', 'XR_HAND', 'XR_SHOULDER']:
+        study_data = get_study_level_data(study_type=study_type, data_dir=args.data_in)
 
         # #### Create dataloaders pipeline
         data_cat = ['train', 'valid']  # data categories
-        dataloaders = get_dataloaders(study_data, batch_size=args.batch_size,)
+        dataloaders = get_dataloaders(study_data, batch_size=args.batch_size)
         dataset_sizes = {x: len(study_data[x]) for x in data_cat}
 
         # #### Build model
